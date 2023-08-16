@@ -33,6 +33,7 @@ def action():
         print(result())
     else:
         print("Invalid action. Please choose a valid operation.")
+        action()
 
     while should_continue:
         
