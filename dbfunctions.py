@@ -22,7 +22,7 @@ def add_product():
         return "Id already in use try again with another id"
     else:
         cdb.conn.commit()
-        return "Your product has been added successfully"
+        return "\nproduct has been added successfully"
 
 def update_product():
 
@@ -35,7 +35,7 @@ def update_product():
     row = cdb.cursor.fetchone()
 
     if row:
-        print("\nHere are the details of the row with the specified id: \n")
+        print("\nHere are the products details: \n")
         print(f"id: {row[0]} \nname: {row[1]} \ncategory: {row[2]} \nprice: {row[3]} \nquantity: {row[4]}")
 
         should_continue = True
@@ -54,8 +54,11 @@ def update_product():
                 change = input(f"\nEnter new product category: ")
             elif required_change == "price":
                 change = float(input(f"\nEnter new price: "))
-            else:
+            elif required_change == "quantity":
                 change = input(f"\nEnter new product quantity: ")
+            else:
+                print("Invalid Entry")
+                continue
 
             # make required change to the product
             cdb.cursor.execute(f"UPDATE products SET {required_change}=? WHERE id=?",(change, product_id))
@@ -67,15 +70,35 @@ def update_product():
             updated_row = cdb.cursor.fetchone()
             print("\nUpdated information:")
             print(f"id: {updated_row[0]} \nname: {updated_row[1]} \ncategory: {updated_row[2]} \nprice: {updated_row[3]} \nquantity: {updated_row[4]}")
-            
-            cont = input("Do you still want to make changes to this product yes/no: ").lower()
 
-            if cont == "no":
+            if input("Do you still want to make changes to this product yes/no: ").lower() == "no":
                 should_continue = False
     else:
-        print("No row found with the specified ID.")
-    return
+        return "\nNo row found with the specified ID."
+    
+    return "\n"
 
 
 def search():
-    print("nil")
+
+    should_continue = True
+
+    while should_continue:
+        # get desired product id
+        product_id = input("Enter products id: ")
+
+        # select desired row
+        cdb.cursor.execute("SELECT * FROM products WHERE id=?", [product_id])
+
+        row = cdb.cursor.fetchone()
+
+        if row:
+            print("\nHere are the product details: \n")
+            print(f"id: {row[0]} \nname: {row[1]} \ncategory: {row[2]} \nprice: {row[3]} \nquantity: {row[4]}")
+
+            if input("\nDo you want to search for another row? yes/no: ") == "no":
+                should_continue = False
+        else:
+            return "\nNo row found with the specified ID."
+
+    return
