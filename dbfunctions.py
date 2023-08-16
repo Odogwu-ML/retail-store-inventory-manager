@@ -25,7 +25,57 @@ def add_product():
         return "Your product has been added successfully"
 
 def update_product():
-    print("nil")
+
+    # get the product id
+    product_id = input("\nEnter product id: ")
+
+    # select desired row
+    cdb.cursor.execute("SELECT * FROM products WHERE id=?", [product_id])
+
+    row = cdb.cursor.fetchone()
+
+    if row:
+        print("\nHere are the details of the row with the specified id: \n")
+        print(f"id: {row[0]} \nname: {row[1]} \ncategory: {row[2]} \nprice: {row[3]} \nquantity: {row[4]}")
+
+        should_continue = True
+
+        while should_continue:
+
+            print("\nWhere would you like to make channges to: \n\nname \nid \ncategory \nprice or \nquantity\n")
+
+            required_change = input("")
+
+            if required_change == "name":
+                change = input(f"\nEnter new product name: ")
+            elif required_change == "id":
+                change = int(input(f"\nEnter new product id: "))
+            elif required_change == "category":
+                change = input(f"\nEnter new product category: ")
+            elif required_change == "price":
+                change = float(input(f"\nEnter new price: "))
+            else:
+                change = input(f"\nEnter new product quantity: ")
+
+            # make required change to the product
+            cdb.cursor.execute(f"UPDATE products SET {required_change}=? WHERE id=?",(change, product_id))
+            cdb.conn.commit()
+            print("\nProduct updated successfully")
+
+            # Fetch and display the updated row
+            cdb.cursor.execute("SELECT * FROM products WHERE id=?", [product_id])
+            updated_row = cdb.cursor.fetchone()
+            print("\nUpdated information:")
+            print(f"id: {updated_row[0]} \nname: {updated_row[1]} \ncategory: {updated_row[2]} \nprice: {updated_row[3]} \nquantity: {updated_row[4]}")
+            
+            cont = input("Do you still want to make changes to this product yes/no: ").lower()
+
+            if cont == "no":
+                should_continue = False
+    else:
+        print("No row found with the specified ID.")
+    return
+
 
 def search():
     print("nil")

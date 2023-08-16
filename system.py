@@ -37,7 +37,7 @@ def action():
 
     while should_continue:
         
-        cont = input(f"Enter 'y' to perform another operation and 'n' to end: ").lower()
+        cont = input(f"\nEnter 'y' to perform another operation and 'n' to end: ").lower()
         
         if cont == 'y':
             os.system("clear")
