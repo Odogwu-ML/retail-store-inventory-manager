@@ -1,9 +1,10 @@
 import creating_db as cdb
+import sqlite3
 
 # add product function
 def add_product():
     # Get the product's details
-    product_id = int(input("Insert products unique id: "))
+    product_id = int(input("Insert products id: "))
     product_name = input("Insert product name: ")
     product_cat = input("What category does the product fall into: ")
     product_price = float(input("Insert product price: "))
@@ -17,13 +18,11 @@ def add_product():
             INSERT INTO products (id, name, category, price, quantity) VALUES (?, ?, ?, ?, ?)
         """, product_details
         )
-    except:
+    except sqlite3.IntegrityError:
         return "Id already in use try again with another id"
     else:
         cdb.conn.commit()
-        cdb.conn.close()
         return "Your product has been added successfully"
-
 
 def update_product():
     print("nil")
