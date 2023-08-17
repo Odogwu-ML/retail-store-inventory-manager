@@ -19,6 +19,7 @@ should_continue = True
 
 def action(): 
 
+    # makes the variable a global variable
     global should_continue 
     # display available actions
     for count, act in enumerate(possible_actions, start=1):
